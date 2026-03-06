@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ozon 搬家助手 v2</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0c0c14;--surface:#13131e;--card:#1a1a28;--border:#2c2c42;--accent:#5b7af5;--accent2:#8b5cf6;--green:#10b981;--orange:#f59e0b;--red:#ef4444;--text:#e8e8f2;--muted:#6b6b8a}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 60% 40% at 15% 10%,rgba(91,122,245,.07) 0%,transparent 60%),radial-gradient(ellipse 40% 50% at 85% 85%,rgba(139,92,246,.05) 0%,transparent 60%)}
+.wrap{max-width:860px;margin:0 auto;padding:36px 20px 80px;position:relative}
+header{text-align:center;margin-bottom:36px}
+.logo-row{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:10px}
+.logo{width:44px;height:44px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px}
+h1{font-family:'Syne',sans-serif;font-size:26px;font-weight:800}
+.sub{color:var(--muted);font-size:13px;margin-top:6px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:18px}
+.ct{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:16px;display:flex;align-items:center;gap:7px}
+.ct .dot{width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0}
+label{font-size:12px;color:var(--muted);display:block;margin-bottom:6px;font-weight:500}
+input[type=text],input[type=password],textarea{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:11px 14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;transition:border-color .2s}
+input:focus,textarea:focus{border-color:var(--accent)}
+textarea{resize:vertical}
+.iw{position:relative;margin-bottom:14px}
+.eye{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--muted);cursor:pointer;font-size:15px}
+.has-eye input{padding-right:40px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:12px 22px;border-radius:9px;border:none;cursor:pointer;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;transition:all .2s;letter-spacing:.3px}
+.btn-p{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;width:100%;box-shadow:0 4px 18px rgba(91,122,245,.3)}
+.btn-p:hover{transform:translateY(-1px);box-shadow:0 6px 22px rgba(91,122,245,.4)}
+.btn-p:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.btn-o{background:none;border:1px solid var(--border);color:var(--muted);font-family:'DM Sans',sans-serif;font-weight:500;font-size:12px}
+.btn-o:hover{border-color:var(--accent);color:var(--accent)}
+.btn-cp{background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.25);color:var(--green);padding:5px 12px;border-radius:6px;font-size:11px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .2s}
+.btn-cp:hover{background:rgba(16,185,129,.2)}.btn-cp.ok{background:rgba(16,185,129,.25)}
+.hint{background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2);border-radius:9px;padding:13px 15px;margin-bottom:14px;font-size:12px;color:#c49a3c;line-height:1.7}
+.hint a{color:var(--orange)}.hint strong{color:#e0b050}
+.err{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:9px;padding:12px 14px;font-size:12px;color:#f87171;line-height:1.6;display:none;margin-bottom:14px}
+.err.show{display:block}
+.pw{display:none;margin:18px 0}.pw.show{display:block}
+.pb{height:3px;background:var(--border);border-radius:2px;overflow:hidden;margin-bottom:12px}
+.pf{height:100%;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:2px;transition:width .4s ease}
+.ps{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);padding:5px 0;border-bottom:1px solid var(--border)}
+.ps:last-child{border-bottom:none}.ps.run{color:var(--accent)}.ps.ok{color:var(--green)}.ps.fail{color:var(--red)}
+.spin{animation:spin .8s linear infinite;display:inline-block}
+@keyframes spin{to{transform:rotate(360deg)}}
+.results{display:none}.results.show{display:block}
+@media(min-width:640px){.rcols{display:grid;grid-template-columns:1fr 1fr;gap:16px}}
+.img-out{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:16px}
+.img-ph{padding:60px 20px;text-align:center;color:var(--muted);font-size:13px;line-height:1.7}
+.img-acts{display:flex;gap:10px;padding:14px;border-top:1px solid var(--border)}
+.img-acts .btn{flex:1;padding:10px;font-size:12px}
+.rb{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:12px;transition:border-color .2s}
+.rb:hover{border-color:rgba(91,122,245,.3)}
+.rh{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px}
+.rl{font-size:11px;font-family:'Syne',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--muted)}
+.rt{font-size:13px;line-height:1.7;color:var(--text);white-space:pre-wrap;word-break:break-word}
+.cc{font-size:11px;color:var(--muted);margin-top:5px}
+.tw{display:flex;flex-wrap:wrap;gap:6px}
+.tag{background:rgba(91,122,245,.1);border:1px solid rgba(91,122,245,.25);color:#8fa8f7;padding:3px 10px;border-radius:12px;font-size:11px;cursor:pointer}
+.tag:hover{background:rgba(91,122,245,.2)}
+.cp{display:inline-flex;align-items:center;gap:5px;background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.25);color:#b08af0;padding:6px 12px;border-radius:7px;font-size:12px}
+.rr{text-align:center;margin-top:24px}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="logo-row"><div class="logo">🛒</div><h1>Ozon 搬家助手</h1></div>
+  <p class="sub">填写商品信息 → Gemini AI 生成俄语主图 + 上架文案</p>
+</header>
+
+<!-- Key -->
+<div class="card" id="ckey">
+  <div class="ct"><span class="dot"></span>第一步：配置 Gemini API Key</div>
+  <div class="hint">
+    <strong>获取 Key（1分钟）</strong><br>
+    1. 打开 <a href="https://aistudio.google.com/app/apikey" target="_blank">aistudio.google.com/app/apikey</a><br>
+    2. 点击 <strong>「Create API Key」</strong> → 复制粘贴到下方<br>
+    <span style="opacity:.8">✅ 每天免费50次 · Key 仅存在你电脑浏览器本地，不上传</span>
+  </div>
+  <div class="iw has-eye">
+    <label>Gemini API Key</label>
+    <input type="password" id="gkey" placeholder="AIzaSy...">
+    <button class="eye" onclick="toggleEye()">👁</button>
+  </div>
+  <button class="btn btn-p" onclick="saveKey()">保存 Key</button>
+  <div id="keyOk" style="display:none;margin-top:10px;font-size:12px;color:var(--green)">✅ Key 已保存，请填写下方商品信息</div>
+</div>
+
+<!-- Input -->
+<div class="card">
+  <div class="ct"><span class="dot"></span>第二步：填写商品信息</div>
+  <div class="iw">
+    <label>商品链接（可选，填了会显示在记录里）</label>
+    <input type="text" id="purl" placeholder="https://www.amazon.com/dp/...">
+  </div>
+  <div class="iw">
+    <label>中文标题 <span style="color:var(--red)">*</span></label>
+    <input type="text" id="ztitle" placeholder="例：骑行尾灯 USB充电 IPX6防水 300流明">
+  </div>
+  <div class="iw">
+    <label>卖点 / 功能描述（越详细效果越好）</label>
+    <textarea id="feats" rows="4" placeholder="例：&#10;- 300流明超亮LED&#10;- IPX6防水防震，雨天可用&#10;- USB-C快充，续航8小时&#10;- 适合公路车/山地车尾部安装&#10;- 3种闪烁模式"></textarea>
+  </div>
+  <div class="iw">
+    <label>产品类别（选填）</label>
+    <input type="text" id="pcat" placeholder="例：骑行灯 / 健身器材 / 蓝牙耳机">
+  </div>
+  <div id="ierr" class="err"></div>
+  <button class="btn btn-p" id="genBtn" onclick="go()">✨ 生成主图 + 俄语文案</button>
+</div>
+
+<!-- Progress -->
+<div class="pw" id="pw"><div class="pb"><div class="pf" id="pf"></div></div><div id="psteps"></div></div>
+
+<!-- Results -->
+<div class="results" id="res">
+  <div class="rcols">
+    <div>
+      <div class="img-out">
+        <div style="padding:14px 18px 0"><div class="ct" style="margin-bottom:10px"><span class="dot"></span>AI 生成主图</div></div>
+        <div id="imgArea"><div class="img-ph">主图将在这里显示</div></div>
+        <div class="img-acts">
+          <button class="btn btn-p" id="dlBtn" onclick="dlImg()" style="display:none;flex:2">⬇ 下载主图</button>
+          <button class="btn btn-o" id="rgBtn" onclick="regenImg()" style="display:none;flex:1">🎲 重新生图</button>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="rb"><div class="rh"><div class="rl">📂 Ozon 类目</div><button class="btn-cp" onclick="cp('catv',this)">复制</button></div><span class="cp">📁 <span id="catv">—</span></span></div>
+      <div class="rb"><div class="rh"><div class="rl">🇷🇺 俄语标题</div><button class="btn-cp" onclick="cp('rtit',this)">复制</button></div><div class="rt" id="rtit">—</div><div class="cc" id="rlen"></div></div>
+      <div class="rb"><div class="rh"><div class="rl">🇷🇺 俄语描述</div><button class="btn-cp" onclick="cp('rdesc',this)">复制</button></div><div class="rt" id="rdesc">—</div></div>
+      <div class="rb"><div class="rh"><div class="rl">🏷️ 关键词</div><button class="btn-cp" onclick="cpkw(this)">全部复制</button></div><div class="tw" id="kwtags"></div></div>
+    </div>
+  </div>
+  <div class="rr"><button class="btn btn-o" onclick="reset()" style="padding:10px 28px">🔄 处理下一个商品</button></div>
+</div>
+
+</div>
+<canvas id="wc" style="display:none"></canvas>
+<script>
+const MT='gemini-2.5-pro-exp-03-25', MI='imagen-3.0-generate-002';
+const GB='https://generativelanguage.googleapis.com/v1beta';
+let gkey='',kw=[],lb64='',lru=null,lp=null;
+
+onload=()=>{
+  gkey=localStorage.getItem('oz_gkey')||'';
+  if(gkey){document.getElementById('gkey').value=gkey;document.getElementById('keyOk').style.display='block';}
+};
+function toggleEye(){const i=document.getElementById('gkey');i.type=i.type==='password'?'text':'password';}
+function saveKey(){
+  const k=document.getElementById('gkey').value.trim();
+  if(!k){alert('请输入 Gemini API Key');return;}
+  gkey=k;localStorage.setItem('oz_gkey',k);
+  document.getElementById('keyOk').style.display='block';
+  document.getElementById('ztitle').focus();
+}
+
+async function go(){
+  const title=document.getElementById('ztitle').value.trim();
+  const feats=document.getElementById('feats').value.trim();
+  const cat=document.getElementById('pcat').value.trim();
+  const url=document.getElementById('purl').value.trim();
+  const ee=document.getElementById('ierr');
+  he(ee);
+  if(!gkey){se(ee,'请先填写并保存 Gemini API Key');return;}
+  if(!title){se(ee,'请填写中文标题（必填）');return;}
+  document.getElementById('genBtn').disabled=true;
+  document.getElementById('res').classList.remove('show');
+  const pw=document.getElementById('pw');pw.classList.add('show');
+  document.getElementById('psteps').innerHTML='';fill(5);
+  lp={title,feats,cat,url};
+  try{
+    ap('c','Gemini 生成俄语文案…','run');fill(15);
+    const ru=await genRu(lp);lru=ru;
+    up('c','✅ 俄语文案生成完成','ok');fill(45);
+    ap('i','Imagen 3 生成电商主图（约15秒）…','run');fill(50);
+    const b64=await genImg(lp,ru);
+    up('i','✅ 主图生成完成','ok');fill(78);
+    ap('t','叠加俄语文字…','run');fill(85);
+    const fb64=await overlay(b64,ru);lb64=fb64;
+    up('t','✅ 完成','ok');fill(100);
+    setTimeout(()=>{pw.classList.remove('show');showRes(ru,fb64);},500);
+  }catch(e){
+    up('c','❌ '+e.message,'fail');
+    se(ee,'生成失败：'+e.message);
+    document.getElementById('genBtn').disabled=false;
+  }
+}
+
+async function genRu(p){
+  const prompt=`Ты — эксперт по продажам на Ozon с отличным знанием русского языка.
+Товар:
+- Название (китайский): ${p.title}
+- Особенности: ${p.feats||'не указано'}
+- Категория: ${p.cat||'определи сам'}
+
+Верни ТОЛЬКО JSON без лишнего текста:
+{"ruTitle":"заголовок до 200 символов, ключевые слова вначале","ruDescription":"описание 180-260 слов, преимущества, естественный русский","keywords":["слово1","слово2",...12-14 слов],"ozonCategory":"категория Ozon третьего уровня по-русски","sellingPoints":["плюс1 кратко","плюс2 кратко","плюс3 кратко"],"imgDesc":"English: product visual description for AI image gen, 25 words max"}`;
+  const r=await cg(prompt);
+  const m=r.match(/\{[\s\S]*\}/);
+  if(!m)throw new Error('AI返回格式异常，请重试');
+  return JSON.parse(m[0]);
+}
+
+async function genImg(p,ru){
+  const desc=ru.imgDesc||p.title;
+  const prompt=`Clean professional e-commerce product photo: ${desc}. `+
+    `Modern e-commerce banner style. Deep navy-to-cobalt gradient background. `+
+    `Product centered with dramatic studio lighting and soft drop shadow. `+
+    `Thin gold accent line below product. Subtle geometric light rays. `+
+    `NO text anywhere. Photorealistic 4K quality. 1:1 square format.`;
+  const url=`${GB}/models/${MI}:predict?key=${gkey}`;
+  const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({instances:[{prompt}],parameters:{sampleCount:1,aspectRatio:'1:1'}})});
+  if(!r.ok){
+    const e=await r.json().catch(()=>({}));
+    if(r.status===400)throw new Error('Imagen 3 访问受限：请在 Google AI Studio 确认已开启 Imagen API，或账号地区不支持');
+    if(r.status===429)throw new Error('请求太频繁，请等10秒后重试');
+    throw new Error(e.error?.message||`Imagen错误(${r.status})`);
+  }
+  const d=await r.json();
+  const b64=d.predictions?.[0]?.bytesBase64Encoded;
+  if(!b64)throw new Error('Imagen 3 未返回图片数据，请重试');
+  return b64;
+}
+
+function overlay(b64,ru){
+  return new Promise(res=>{
+    const img=new Image();
+    img.onload=()=>{
+      const S=900,canvas=document.getElementById('wc');
+      canvas.width=S;canvas.height=S;
+      const ctx=canvas.getContext('2d');
+      ctx.drawImage(img,0,0,S,S);
+      // Bottom gradient bar
+      const BAR=185,g=ctx.createLinearGradient(0,S-BAR-30,0,S);
+      g.addColorStop(0,'rgba(8,16,60,0)');g.addColorStop(.35,'rgba(8,16,60,.82)');g.addColorStop(1,'rgba(8,16,60,.97)');
+      ctx.fillStyle=g;ctx.fillRect(0,S-BAR-30,S,BAR+30);
+      // Gold line
+      ctx.fillStyle='#c9a84c';ctx.fillRect(44,S-BAR-8,S-88,2);
+      // Title
+      const title=ru.ruTitle||'';
+      ctx.textAlign='center';ctx.shadowColor='rgba(0,0,0,.9)';ctx.shadowBlur=8;
+      let fs=30;ctx.font=`bold ${fs}px Arial`;
+      while(ctx.measureText(title).width>S-80&&fs>14){fs--;ctx.font=`bold ${fs}px Arial`;}
+      const lines=wt(ctx,title,S-80);
+      ctx.fillStyle='#ffffff';
+      const lh=fs+8,sy=S-BAR+(BAR-lines.length*lh-38)/2+fs;
+      lines.forEach((l,i)=>ctx.fillText(l,S/2,sy+i*lh));
+      // Selling points
+      ctx.shadowBlur=4;ctx.fillStyle='#a8c4ff';
+      const spfs=Math.max(12,fs-10);ctx.font=`500 ${spfs}px Arial`;
+      const sp=(ru.sellingPoints||ru.keywords||[]).slice(0,3).map(s=>s.slice(0,20)).join('  ✦  ');
+      ctx.fillText(sp,S/2,S-22);
+      ctx.shadowBlur=0;
+      res(canvas.toDataURL('image/png').split(',')[1]);
+    };
+    img.src=`data:image/png;base64,${b64}`;
+  });
+}
+
+function wt(ctx,text,maxW){
+  const words=text.split(' '),lines=[];let cur='';
+  for(const w of words){
+    const t=cur?cur+' '+w:w;
+    if(ctx.measureText(t).width<=maxW){cur=t;}
+    else{
+      if(cur)lines.push(cur);cur=w;
+      if(lines.length>=1){
+        const rest=words.slice(words.indexOf(w)).join(' ');
+        lines.push(rest.slice(0,65));return lines;
+      }
+    }
+  }
+  if(cur)lines.push(cur);return lines.slice(0,2);
+}
+
+async function cg(prompt){
+  const url=`${GB}/models/${MT}:generateContent?key=${gkey}`;
+  const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({contents:[{parts:[{text:prompt}]}]})});
+  if(!r.ok){
+    const e=await r.json().catch(()=>({}));
+    if(r.status===400)throw new Error('Gemini API Key 不正确，请重新检查');
+    if(r.status===429)throw new Error('请求太频繁，请稍等后重试');
+    throw new Error(e.error?.message||`Gemini错误(${r.status})`);
+  }
+  const d=await r.json();
+  return d.candidates?.[0]?.content?.parts?.[0]?.text||'';
+}
+
+function showRes(ru,b64){
+  document.getElementById('imgArea').innerHTML=`<img src="data:image/png;base64,${b64}" style="width:100%;display:block">`;
+  document.getElementById('dlBtn').style.display='flex';
+  document.getElementById('rgBtn').style.display='flex';
+  document.getElementById('catv').textContent=ru.ozonCategory||'—';
+  const t=ru.ruTitle||'—';
+  document.getElementById('rtit').textContent=t;
+  document.getElementById('rlen').textContent=`字符数：${t.length}/200 ${t.length>200?'⚠️超出':'✅'}`;
+  document.getElementById('rdesc').textContent=ru.ruDescription||'—';
+  kw=ru.keywords||[];
+  const kwtags=document.getElementById('kwtags');kwtags.innerHTML='';
+  kw.forEach(k=>{const s=document.createElement('span');s.className='tag';s.textContent=k;s.onclick=()=>navigator.clipboard.writeText(k);kwtags.appendChild(s);});
+  document.getElementById('res').classList.add('show');
+  document.getElementById('genBtn').disabled=false;
+  document.getElementById('res').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function dlImg(){if(!lb64)return;const a=document.createElement('a');a.href=`data:image/png;base64,${lb64}`;a.download='ozon_banner.png';a.click();}
+
+async function regenImg(){
+  if(!lp||!lru)return;
+  const btn=document.getElementById('rgBtn');btn.disabled=true;btn.textContent='⟳ 生成中…';
+  document.getElementById('imgArea').innerHTML='<div class="img-ph">Imagen 3 重新生成中…约15秒</div>';
+  try{
+    const b64=await genImg(lp,lru);
+    const fb64=await overlay(b64,lru);lb64=fb64;
+    document.getElementById('imgArea').innerHTML=`<img src="data:image/png;base64,${fb64}" style="width:100%;display:block">`;
+  }catch(e){
+    document.getElementById('imgArea').innerHTML=`<div class="img-ph" style="color:var(--red)">${e.message}</div>`;
+  }
+  btn.disabled=false;btn.textContent='🎲 重新生图';
+}
+
+function cp(id,btn){
+  navigator.clipboard.writeText(document.getElementById(id).textContent||'').then(()=>{
+    const o=btn.textContent;btn.textContent='✅';btn.classList.add('ok');
+    setTimeout(()=>{btn.textContent=o;btn.classList.remove('ok');},1800);
+  });
+}
+function cpkw(btn){
+  navigator.clipboard.writeText(kw.join(', ')).then(()=>{
+    const o=btn.textContent;btn.textContent='✅';btn.classList.add('ok');
+    setTimeout(()=>{btn.textContent=o;btn.classList.remove('ok');},1800);
+  });
+}
+function ap(id,t,c){const d=document.createElement('div');d.id='ps_'+id;d.className='ps '+(c||'');d.innerHTML=(c==='run'?'<span class="spin">⟳</span> ':'')+t;document.getElementById('psteps').appendChild(d);}
+function up(id,t,c){const e=document.getElementById('ps_'+id);if(!e)return;e.className='ps '+c;e.innerHTML=t;}
+function fill(p){document.getElementById('pf').style.width=p+'%';}
+function se(el,m){el.textContent=m;el.classList.add('show');}
+function he(el){el.classList.remove('show');}
+function reset(){
+  ['purl','ztitle','feats','pcat'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('res').classList.remove('show');
+  document.getElementById('pw').classList.remove('show');
+  document.getElementById('psteps').innerHTML='';
+  document.getElementById('genBtn').disabled=false;
+  document.getElementById('dlBtn').style.display='none';
+  document.getElementById('rgBtn').style.display='none';
+  fill(0);window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>
