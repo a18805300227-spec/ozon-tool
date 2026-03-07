@@ -458,6 +458,24 @@ body::before {
     </div>
     <button class="save-btn" onclick="saveSettings()">💾 保存配置</button>
     <div class="save-ok" id="saveOk">✅ 配置已保存</div>
+
+    <!-- Preset library -->
+    <div style="margin-top:14px;border-top:1px solid var(--border);padding-top:14px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <div class="set-label" style="margin:0">🔮 多模态分析预设库</div>
+        <div style="display:flex;gap:6px">
+          <input type="file" id="importFile" accept=".json" style="display:none" onchange="importPresets(this)">
+          <button onclick="document.getElementById('importFile').click()" style="padding:4px 10px;border-radius:5px;background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.3);color:#10b981;font-size:10px;font-family:'Space Grotesk',sans-serif;font-weight:700;cursor:pointer">📤 导入</button>
+          <button onclick="exportPresets()" style="padding:4px 10px;border-radius:5px;background:rgba(79,142,247,.15);border:1px solid rgba(79,142,247,.3);color:var(--accent);font-size:10px;font-family:'Space Grotesk',sans-serif;font-weight:700;cursor:pointer">📥 导出</button>
+        </div>
+      </div>
+      <div id="presetList" style="display:flex;flex-direction:column;gap:6px;margin-bottom:10px;max-height:180px;overflow-y:auto"></div>
+      <div style="background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:8px;padding:10px">
+        <input type="text" id="newPresetName" placeholder="风格名称（例：V4 高级感）" style="width:100%;padding:7px 10px;background:rgba(255,255,255,.05);color:var(--text);border:1px solid transparent;border-radius:6px;margin-bottom:7px;font-size:11px;font-family:'Space Grotesk',sans-serif;outline:none">
+        <textarea id="newPresetPrompt" placeholder="提示词指令（例：Professional e-commerce...）" style="width:100%;height:55px;padding:7px 10px;background:rgba(255,255,255,.05);color:var(--text);border:1px solid transparent;border-radius:6px;margin-bottom:7px;font-size:10px;font-family:'JetBrains Mono',monospace;resize:vertical;outline:none"></textarea>
+        <button onclick="addPreset()" style="width:100%;padding:9px;border-radius:7px;border:none;background:linear-gradient(135deg,#7c3aed,#a78bfa);color:#fff;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;cursor:pointer">➕ 注入盲盒</button>
+      </div>
+    </div>
   </div>
 
   <!-- ═══ VISION SECTION ═══ -->
@@ -551,7 +569,10 @@ body::before {
       <button class="cb-copy" onclick="dlAll()" style="padding:5px 12px;font-size:10px">⬇ 下载全部</button>
     </div>
     <div class="res-img-grid" id="resImgGrid"></div>
-    <button class="btn-main btn-single" style="padding:10px;font-size:11px" onclick="regenAll()">🎲 重新生成</button>
+    <div style="display:flex;gap:8px;margin-top:0">
+      <button class="btn-main btn-single" style="padding:10px;font-size:11px;flex:1" onclick="regenAll()">🎲 重新生成</button>
+      <button class="btn-main" id="copyLinkBtn" onclick="copyAllLinks()" style="padding:10px;font-size:11px;flex:1;background:rgba(79,142,247,.15);border:1px solid rgba(79,142,247,.35);color:var(--accent);box-shadow:none">🔗 复制图片链接</button>
+    </div>
   </div>
 
   <!-- ═══ SEO SECTION ═══ -->
@@ -559,6 +580,36 @@ body::before {
     <div class="seo-header">
       <span class="section-title"><span class="icon">📝</span> SEO 炼金炉</span>
       <span class="badge-stream">⚡ 流式极速版</span>
+    </div>
+
+    <!-- SEO Agent selector -->
+    <div style="margin-bottom:10px">
+      <div class="micro-label" style="color:var(--green);margin-bottom:6px">🎯 选择 SEO Agent 流派：</div>
+      <select id="seoStyleSelect" style="width:100%;padding:9px 12px;background:rgba(0,0,0,.3);border:1px solid rgba(16,185,129,.3);border-radius:8px;color:var(--text);font-family:'Space Grotesk',sans-serif;font-size:12px;outline:none;margin-bottom:8px;cursor:pointer">
+        <option value="default">📋 默认SEO Agent（标准版）</option>
+      </select>
+      <!-- SEO Preset library toggle -->
+      <div style="text-align:right">
+        <span onclick="toggleSeoPresets()" style="font-size:10px;color:var(--green);cursor:pointer;text-decoration:underline;text-underline-offset:3px">⚙️ 管理SEO预设库</span>
+      </div>
+    </div>
+
+    <!-- SEO Preset library panel -->
+    <div id="seoPresetPanel" style="display:none;background:rgba(0,0,0,.25);border:1px solid rgba(16,185,129,.2);border-radius:9px;padding:12px;margin-bottom:10px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:9px">
+        <div style="font-size:10px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.5px">📚 SEO Agent 预设库</div>
+        <div style="display:flex;gap:5px">
+          <input type="file" id="importSeoFile" accept=".json" style="display:none" onchange="importSeoPresets(this)">
+          <button onclick="document.getElementById('importSeoFile').click()" style="padding:3px 9px;border-radius:5px;background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.3);color:#10b981;font-size:10px;font-family:'Space Grotesk',sans-serif;font-weight:700;cursor:pointer">📤 导入</button>
+          <button onclick="exportSeoPresets()" style="padding:3px 9px;border-radius:5px;background:rgba(79,142,247,.15);border:1px solid rgba(79,142,247,.3);color:var(--accent);font-size:10px;font-family:'Space Grotesk',sans-serif;font-weight:700;cursor:pointer">📥 导出</button>
+        </div>
+      </div>
+      <div id="seoPresetList" style="display:flex;flex-direction:column;gap:6px;margin-bottom:10px;max-height:200px;overflow-y:auto"></div>
+      <div style="background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:8px;padding:10px">
+        <input type="text" id="newSeoPresetName" placeholder="预设名称（例：极速SEO / 深度分析版）" style="width:100%;padding:7px 10px;background:rgba(255,255,255,.05);color:var(--text);border:1px solid transparent;border-radius:6px;margin-bottom:7px;font-size:11px;font-family:'Space Grotesk',sans-serif;outline:none">
+        <textarea id="newSeoPresetPrompt" placeholder="SEO Agent 系统指令…&#10;例：你是俄罗斯Ozon运营专家，请重点分析产品材质和尺寸…" style="width:100%;height:65px;padding:7px 10px;background:rgba(255,255,255,.05);color:var(--text);border:1px solid transparent;border-radius:6px;margin-bottom:7px;font-size:10px;font-family:'JetBrains Mono',monospace;resize:vertical;outline:none"></textarea>
+        <button onclick="addSeoPreset()" style="width:100%;padding:9px;border-radius:7px;border:none;background:linear-gradient(135deg,#059669,#10b981);color:#fff;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;cursor:pointer">➕ 注入SEO盲盒</button>
+      </div>
     </div>
 
     <!-- Manual mode -->
@@ -658,10 +709,12 @@ const SEO_PROMPT = `你是拥有10年经验的俄罗斯Ozon资深运营专家，
 
 let apiKey='', imgModel='gemini-3.1-flash-image-preview', seoModel='gemini-3-flash-preview';
 let isBatchMode = true;
-let batchQueue = []; // [{name, b64, mime, status, resultUrl}]
+let batchQueue = [];
 let singleB64='', singleMime='image/jpeg';
 let imgHistory = [];
 let lastImgSlots = [], lastSeoRu = null;
+let customPresets = []; // [{name, prompt}]
+let seoPresets = []; // [{name, prompt}]
 
 // ─── Init ─────────────────────────────────────────────────────
 window.onload = () => {
@@ -669,6 +722,8 @@ window.onload = () => {
   imgModel = localStorage.getItem('oz_imgmodel') || 'gemini-3.1-flash-image-preview';
   seoModel = localStorage.getItem('oz_seomodel') || 'gemini-3-flash-preview';
   imgHistory = JSON.parse(localStorage.getItem('oz_history') || '[]');
+  customPresets = JSON.parse(localStorage.getItem('oz_presets') || '[]');
+  seoPresets = JSON.parse(localStorage.getItem('oz_seo_presets') || '[]');
 
   if (apiKey) document.getElementById('apiKey').value = apiKey;
   document.getElementById('imgModel').value = imgModel;
@@ -676,10 +731,223 @@ window.onload = () => {
 
   updatePromptPreview();
   renderHistory();
+  renderPresetList();
+  rebuildStyleSelect();
+  renderSeoPresetList();
+  rebuildSeoSelect();
 
-  // Paste handler
   document.addEventListener('paste', onPaste);
 };
+
+// ─── Preset library ───────────────────────────────────────────
+// ─── Image Preset CRUD ────────────────────────────────────────
+function renderPresetList() {
+  const list = document.getElementById('presetList');
+  list.innerHTML = '';
+  if (customPresets.length === 0) {
+    list.innerHTML = '<div style="font-size:10px;color:var(--muted);text-align:center;padding:8px">暂无自定义预设，在下方添加</div>';
+    return;
+  }
+  customPresets.forEach((p, i) => {
+    const div = document.createElement('div');
+    div.style.cssText = 'background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:7px;overflow:hidden;margin-bottom:0';
+    div.innerHTML = `
+      <div style="padding:9px 11px;display:flex;align-items:flex-start;justify-content:space-between;gap:8px;cursor:pointer" onclick="toggleEditPreset(${i},'img')">
+        <div style="flex:1;min-width:0">
+          <div style="font-size:11px;font-weight:700;color:var(--text);margin-bottom:2px">${escHtml(p.name)}</div>
+          <div style="font-size:9px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escHtml(p.prompt.slice(0,60))}…</div>
+        </div>
+        <div style="display:flex;gap:5px;flex-shrink:0">
+          <span style="font-size:10px;color:var(--accent)">✏️</span>
+          <button onclick="event.stopPropagation();deletePreset(${i})" style="background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);color:#f87171;border-radius:5px;padding:2px 7px;font-size:10px;cursor:pointer;font-family:'Space Grotesk',sans-serif">删除</button>
+        </div>
+      </div>
+      <div id="editImg_${i}" style="display:none;padding:0 11px 11px;border-top:1px solid var(--border)">
+        <div style="margin-top:8px">
+          <div style="font-size:9px;color:var(--muted);margin-bottom:4px;font-weight:600">风格名称</div>
+          <input id="editImgName_${i}" value="${escHtml(p.name)}" style="width:100%;padding:7px 10px;background:rgba(0,0,0,.4);color:var(--text);border:1px solid var(--border);border-radius:6px;font-size:11px;font-family:'Space Grotesk',sans-serif;outline:none;margin-bottom:7px">
+        </div>
+        <div>
+          <div style="font-size:9px;color:var(--muted);margin-bottom:4px;font-weight:600">提示词指令</div>
+          <textarea id="editImgPrompt_${i}" style="width:100%;height:80px;padding:7px 10px;background:rgba(0,0,0,.4);color:#7dd3fc;border:1px solid var(--border);border-radius:6px;font-size:9.5px;font-family:'JetBrains Mono',monospace;resize:vertical;outline:none;line-height:1.5">${escHtml(p.prompt)}</textarea>
+        </div>
+        <button onclick="saveEditPreset(${i},'img')" style="width:100%;margin-top:7px;padding:8px;border-radius:6px;border:none;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;cursor:pointer">💾 保存修改</button>
+      </div>`;
+    list.appendChild(div);
+  });
+}
+
+function toggleEditPreset(i, type) {
+  const el = document.getElementById(`edit${type === 'img' ? 'Img' : 'Seo'}_${i}`);
+  if (!el) return;
+  el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+
+function saveEditPreset(i, type) {
+  if (type === 'img') {
+    customPresets[i].name = document.getElementById(`editImgName_${i}`).value.trim();
+    customPresets[i].prompt = document.getElementById(`editImgPrompt_${i}`).value.trim();
+    localStorage.setItem('oz_presets', JSON.stringify(customPresets));
+    renderPresetList(); rebuildStyleSelect();
+  } else {
+    seoPresets[i].name = document.getElementById(`editSeoName_${i}`).value.trim();
+    seoPresets[i].prompt = document.getElementById(`editSeoPrompt_${i}`).value.trim();
+    localStorage.setItem('oz_seo_presets', JSON.stringify(seoPresets));
+    renderSeoPresetList(); rebuildSeoSelect();
+  }
+}
+
+function addPreset() {
+  const name = document.getElementById('newPresetName').value.trim();
+  const prompt = document.getElementById('newPresetPrompt').value.trim();
+  if (!name || !prompt) { alert('请填写风格名称和提示词'); return; }
+  customPresets.push({ name, prompt });
+  localStorage.setItem('oz_presets', JSON.stringify(customPresets));
+  document.getElementById('newPresetName').value = '';
+  document.getElementById('newPresetPrompt').value = '';
+  renderPresetList(); rebuildStyleSelect();
+}
+
+function deletePreset(i) {
+  customPresets.splice(i, 1);
+  localStorage.setItem('oz_presets', JSON.stringify(customPresets));
+  renderPresetList(); rebuildStyleSelect();
+}
+
+// ─── SEO Preset CRUD ──────────────────────────────────────────
+function renderSeoPresetList() {
+  const list = document.getElementById('seoPresetList');
+  if (!list) return;
+  list.innerHTML = '';
+  if (seoPresets.length === 0) {
+    list.innerHTML = '<div style="font-size:10px;color:var(--muted);text-align:center;padding:8px">暂无SEO预设，在下方添加</div>';
+    return;
+  }
+  seoPresets.forEach((p, i) => {
+    const div = document.createElement('div');
+    div.style.cssText = 'background:rgba(0,0,0,.3);border:1px solid rgba(16,185,129,.15);border-radius:7px;overflow:hidden';
+    div.innerHTML = `
+      <div style="padding:9px 11px;display:flex;align-items:flex-start;justify-content:space-between;gap:8px;cursor:pointer" onclick="toggleEditPreset(${i},'seo')">
+        <div style="flex:1;min-width:0">
+          <div style="font-size:11px;font-weight:700;color:var(--text);margin-bottom:2px">${escHtml(p.name)}</div>
+          <div style="font-size:9px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escHtml(p.prompt.slice(0,60))}…</div>
+        </div>
+        <div style="display:flex;gap:5px;flex-shrink:0">
+          <span style="font-size:10px;color:var(--green)">✏️</span>
+          <button onclick="event.stopPropagation();deleteSeoPreset(${i})" style="background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);color:#f87171;border-radius:5px;padding:2px 7px;font-size:10px;cursor:pointer;font-family:'Space Grotesk',sans-serif">删除</button>
+        </div>
+      </div>
+      <div id="editSeo_${i}" style="display:none;padding:0 11px 11px;border-top:1px solid rgba(16,185,129,.15)">
+        <div style="margin-top:8px">
+          <div style="font-size:9px;color:var(--muted);margin-bottom:4px;font-weight:600">预设名称</div>
+          <input id="editSeoName_${i}" value="${escHtml(p.name)}" style="width:100%;padding:7px 10px;background:rgba(0,0,0,.4);color:var(--text);border:1px solid var(--border);border-radius:6px;font-size:11px;font-family:'Space Grotesk',sans-serif;outline:none;margin-bottom:7px">
+        </div>
+        <div>
+          <div style="font-size:9px;color:var(--muted);margin-bottom:4px;font-weight:600">SEO Agent 指令</div>
+          <textarea id="editSeoPrompt_${i}" style="width:100%;height:90px;padding:7px 10px;background:rgba(0,0,0,.4);color:#6ee7b7;border:1px solid var(--border);border-radius:6px;font-size:9.5px;font-family:'JetBrains Mono',monospace;resize:vertical;outline:none;line-height:1.5">${escHtml(p.prompt)}</textarea>
+        </div>
+        <button onclick="saveEditPreset(${i},'seo')" style="width:100%;margin-top:7px;padding:8px;border-radius:6px;border:none;background:linear-gradient(135deg,#059669,#10b981);color:#fff;font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;cursor:pointer">💾 保存修改</button>
+      </div>`;
+    list.appendChild(div);
+  });
+}
+
+function addSeoPreset() {
+  const name = document.getElementById('newSeoPresetName').value.trim();
+  const prompt = document.getElementById('newSeoPresetPrompt').value.trim();
+  if (!name || !prompt) { alert('请填写预设名称和Agent指令'); return; }
+  seoPresets.push({ name, prompt });
+  localStorage.setItem('oz_seo_presets', JSON.stringify(seoPresets));
+  document.getElementById('newSeoPresetName').value = '';
+  document.getElementById('newSeoPresetPrompt').value = '';
+  renderSeoPresetList(); rebuildSeoSelect();
+}
+
+function deleteSeoPreset(i) {
+  seoPresets.splice(i, 1);
+  localStorage.setItem('oz_seo_presets', JSON.stringify(seoPresets));
+  renderSeoPresetList(); rebuildSeoSelect();
+}
+
+function rebuildSeoSelect() {
+  const sel = document.getElementById('seoStyleSelect');
+  if (!sel) return;
+  sel.innerHTML = '<option value="default">📋 默认SEO Agent（标准版）</option>';
+  seoPresets.forEach((p, i) => {
+    const opt = document.createElement('option');
+    opt.value = 'seo_custom_' + i;
+    opt.textContent = '🎯 ' + p.name;
+    sel.appendChild(opt);
+  });
+}
+
+function exportSeoPresets() {
+  const a = document.createElement('a');
+  a.href = 'data:application/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(seoPresets, null, 2));
+  a.download = 'ozon_seo_presets.json'; a.click();
+}
+
+function importSeoPresets(inp) {
+  const file = inp.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (!Array.isArray(data)) throw new Error('格式错误');
+      seoPresets = [...seoPresets, ...data.filter(p => p.name && p.prompt)];
+      localStorage.setItem('oz_seo_presets', JSON.stringify(seoPresets));
+      renderSeoPresetList(); rebuildSeoSelect();
+      alert(`✅ 成功导入 ${data.length} 个SEO预设`);
+    } catch(err) { alert('导入失败：' + err.message); }
+  };
+  reader.readAsText(file); inp.value = '';
+}
+
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function rebuildStyleSelect() {
+  const sel = document.getElementById('styleSelect');
+  const cur = sel.value;
+  // Keep built-in options, remove custom ones first
+  const builtins = ['main','fast','cyber','life','spec'];
+  // Remove old custom options
+  [...sel.options].forEach(o => { if (!builtins.includes(o.value)) sel.remove(o.index); });
+  // Add custom presets
+  customPresets.forEach((p, i) => {
+    const opt = document.createElement('option');
+    opt.value = 'custom_' + i;
+    opt.textContent = '🎨 ' + p.name;
+    sel.appendChild(opt);
+  });
+  if ([...sel.options].find(o => o.value === cur)) sel.value = cur;
+  updatePromptPreview();
+}
+
+function exportPresets() {
+  const data = JSON.stringify(customPresets, null, 2);
+  const a = document.createElement('a');
+  a.href = 'data:application/json;charset=utf-8,' + encodeURIComponent(data);
+  a.download = 'ozon_presets.json'; a.click();
+}
+
+function importPresets(inp) {
+  const file = inp.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (!Array.isArray(data)) throw new Error('格式错误');
+      customPresets = [...customPresets, ...data.filter(p => p.name && p.prompt)];
+      localStorage.setItem('oz_presets', JSON.stringify(customPresets));
+      renderPresetList(); rebuildStyleSelect();
+      alert(`✅ 成功导入 ${data.length} 个预设`);
+    } catch(err) { alert('导入失败：' + err.message); }
+  };
+  reader.readAsText(file);
+  inp.value = '';
+}
 
 // ─── Settings ─────────────────────────────────────────────────
 function toggleSettings() {
@@ -719,7 +987,12 @@ function toggleMode() {
 // ─── Prompt preview ───────────────────────────────────────────
 function updatePromptPreview() {
   const style = document.getElementById('styleSelect').value;
-  document.getElementById('promptPreview').textContent = PROMPTS[style];
+  if (style.startsWith('custom_')) {
+    const idx = parseInt(style.replace('custom_',''));
+    document.getElementById('promptPreview').textContent = customPresets[idx]?.prompt || '';
+  } else {
+    document.getElementById('promptPreview').textContent = PROMPTS[style] || '';
+  }
 }
 
 // ─── Paste handler ────────────────────────────────────────────
@@ -866,7 +1139,8 @@ async function runSingle() {
 
   const style = document.getElementById('styleSelect').value;
   const extra = document.getElementById('singleExtra').value.trim();
-  const prompt = PROMPTS[style] + (extra ? `\n附加要求：${extra}` : '');
+  const basePrompt = style.startsWith("custom_") ? (customPresets[parseInt(style.replace("custom_",""))]?.prompt || "") : (PROMPTS[style] || "");
+  const prompt = basePrompt + (extra ? `\n附加要求：${extra}` : "");
 
   initImgResults(1);
   ap('img', 'AI 解析并生成图像…', 'run'); pfill(20);
@@ -982,6 +1256,10 @@ async function callImageAPI(model, prompt, b64, mime) {
 function toggleManual() {
   document.getElementById('manualSection').classList.toggle('open');
 }
+function toggleSeoPresets() {
+  const p = document.getElementById('seoPresetPanel');
+  p.style.display = p.style.display === 'none' ? 'block' : 'none';
+}
 
 async function runSeo() {
   he('seoErr');
@@ -1004,7 +1282,14 @@ async function runSeo() {
       : (singleB64 || '');
     const mime2 = isBatchMode ? (batchQueue[0]?.mime||'image/jpeg') : singleMime;
 
-    let userContent = SEO_PROMPT + `\n\n商品中文标题：${manTitle||'从图片识别'}\n卖点：${manFeats||'从图片提取'}`;
+    let userContent = SEO_PROMPT;
+    // Apply custom SEO preset if selected
+    const seoStyleVal = document.getElementById('seoStyleSelect')?.value || 'default';
+    if (seoStyleVal.startsWith('seo_custom_')) {
+      const idx = parseInt(seoStyleVal.replace('seo_custom_',''));
+      if (seoPresets[idx]) userContent = seoPresets[idx].prompt;
+    }
+    userContent += `\n\n商品中文标题：${manTitle||'从图片识别'}\n卖点：${manFeats||'从图片提取'}`;
 
     const messages = [];
     if (b64) {
@@ -1085,6 +1370,15 @@ function dlOne(url, idx) {
 }
 function dlAll() {
   lastImgSlots.forEach((s,i) => { if(s.url) setTimeout(()=>dlOne(s.url,i), i*400); });
+}
+function copyAllLinks() {
+  const urls = lastImgSlots.filter(s=>s.url).map(s=>s.url);
+  if (!urls.length) { alert("暂无生成图片"); return; }
+  navigator.clipboard.writeText(urls.join("\n")).then(() => {
+    const btn = document.getElementById("copyLinkBtn");
+    const o = btn.textContent; btn.textContent = "✅ 已复制";
+    setTimeout(()=>btn.textContent=o, 2000);
+  });
 }
 async function regenAll() {
   if (isBatchMode) await runBatch();
