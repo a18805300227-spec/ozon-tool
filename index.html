@@ -3,356 +3,635 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ozon 搬家助手 v2</title>
+<title>Ozon 搬家助手 v3</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0c0c14;--surface:#13131e;--card:#1a1a28;--border:#2c2c42;--accent:#5b7af5;--accent2:#8b5cf6;--green:#10b981;--orange:#f59e0b;--red:#ef4444;--text:#e8e8f2;--muted:#6b6b8a}
+:root{--bg:#0c0c14;--s:#13131e;--c:#1a1a28;--b:#2c2c42;--a:#5b7af5;--a2:#8b5cf6;--g:#10b981;--o:#f59e0b;--r:#ef4444;--t:#e8e8f2;--m:#6b6b8a}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--t);min-height:100vh}
 body::before{content:'';position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 60% 40% at 15% 10%,rgba(91,122,245,.07) 0%,transparent 60%),radial-gradient(ellipse 40% 50% at 85% 85%,rgba(139,92,246,.05) 0%,transparent 60%)}
-.wrap{max-width:860px;margin:0 auto;padding:36px 20px 80px;position:relative}
-header{text-align:center;margin-bottom:36px}
-.logo-row{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:10px}
-.logo{width:44px;height:44px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px}
-h1{font-family:'Syne',sans-serif;font-size:26px;font-weight:800}
-.sub{color:var(--muted);font-size:13px;margin-top:6px}
-.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:18px}
-.ct{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:16px;display:flex;align-items:center;gap:7px}
-.ct .dot{width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0}
-label{font-size:12px;color:var(--muted);display:block;margin-bottom:6px;font-weight:500}
-input[type=text],input[type=password],textarea{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:11px 14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;transition:border-color .2s}
-input:focus,textarea:focus{border-color:var(--accent)}
+.wrap{max-width:960px;margin:0 auto;padding:32px 20px 80px;position:relative}
+
+/* Header */
+header{text-align:center;margin-bottom:32px}
+.logo-row{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:8px}
+.logo{width:42px;height:42px;background:linear-gradient(135deg,var(--a),var(--a2));border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:20px}
+h1{font-family:'Syne',sans-serif;font-size:24px;font-weight:800}
+.sub{color:var(--m);font-size:12px;margin-top:5px}
+
+/* Cards */
+.card{background:var(--c);border:1px solid var(--b);border-radius:13px;padding:20px;margin-bottom:16px}
+.ct{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--m);margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.dot{width:5px;height:5px;border-radius:50%;background:var(--a);flex-shrink:0}
+
+/* Forms */
+label{font-size:11px;color:var(--m);display:block;margin-bottom:5px;font-weight:500}
+input,textarea,select{width:100%;background:var(--s);border:1px solid var(--b);border-radius:8px;padding:10px 13px;color:var(--t);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;transition:border-color .2s}
+input:focus,textarea:focus,select:focus{border-color:var(--a)}
+select option{background:#1a1a28}
 textarea{resize:vertical}
-.iw{position:relative;margin-bottom:14px}
-.eye{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--muted);cursor:pointer;font-size:15px}
-.has-eye input{padding-right:40px}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:12px 22px;border-radius:9px;border:none;cursor:pointer;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;transition:all .2s;letter-spacing:.3px}
-.btn-p{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;width:100%;box-shadow:0 4px 18px rgba(91,122,245,.3)}
-.btn-p:hover{transform:translateY(-1px);box-shadow:0 6px 22px rgba(91,122,245,.4)}
-.btn-p:disabled{opacity:.45;cursor:not-allowed;transform:none}
-.btn-o{background:none;border:1px solid var(--border);color:var(--muted);font-family:'DM Sans',sans-serif;font-weight:500;font-size:12px}
-.btn-o:hover{border-color:var(--accent);color:var(--accent)}
-.btn-cp{background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.25);color:var(--green);padding:5px 12px;border-radius:6px;font-size:11px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .2s}
+.iw{position:relative;margin-bottom:13px}
+.eye{position:absolute;right:11px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--m);cursor:pointer;font-size:14px}
+.has-eye input{padding-right:38px}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:11px 20px;border-radius:8px;border:none;cursor:pointer;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;transition:all .2s;letter-spacing:.3px}
+.btn-p{background:linear-gradient(135deg,var(--a),var(--a2));color:#fff;width:100%;box-shadow:0 4px 16px rgba(91,122,245,.28)}
+.btn-p:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(91,122,245,.38)}
+.btn-p:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.btn-o{background:none;border:1px solid var(--b);color:var(--m);font-family:'DM Sans',sans-serif;font-weight:500;font-size:11px}
+.btn-o:hover{border-color:var(--a);color:var(--a)}
+.btn-g{background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.3);color:var(--g);font-family:'DM Sans',sans-serif;font-weight:600;font-size:11px}
+.btn-g:hover{background:rgba(16,185,129,.22)}
+.btn-cp{background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.25);color:var(--g);padding:4px 11px;border-radius:5px;font-size:10px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .2s}
 .btn-cp:hover{background:rgba(16,185,129,.2)}.btn-cp.ok{background:rgba(16,185,129,.25)}
-.hint{background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2);border-radius:9px;padding:13px 15px;margin-bottom:14px;font-size:12px;color:#c49a3c;line-height:1.7}
-.hint a{color:var(--orange)}.hint strong{color:#e0b050}
-.err{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:9px;padding:12px 14px;font-size:12px;color:#f87171;line-height:1.6;display:none;margin-bottom:14px}
+
+/* Alerts */
+.hint{background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2);border-radius:8px;padding:12px 14px;margin-bottom:13px;font-size:11px;color:#c49a3c;line-height:1.7}
+.hint a{color:var(--o)}.hint strong{color:#e0b050}
+.err{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:8px;padding:10px 13px;font-size:11px;color:#f87171;line-height:1.6;display:none;margin-bottom:12px}
 .err.show{display:block}
-.pw{display:none;margin:18px 0}.pw.show{display:block}
-.pb{height:3px;background:var(--border);border-radius:2px;overflow:hidden;margin-bottom:12px}
-.pf{height:100%;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:2px;transition:width .4s ease}
-.ps{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);padding:5px 0;border-bottom:1px solid var(--border)}
-.ps:last-child{border-bottom:none}.ps.run{color:var(--accent)}.ps.ok{color:var(--green)}.ps.fail{color:var(--red)}
-.spin{animation:spin .8s linear infinite;display:inline-block}
+
+/* Two columns */
+.cols2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:640px){.cols2{grid-template-columns:1fr}}
+
+/* Image slots grid */
+.img-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.img-slot{background:var(--s);border:2px solid var(--b);border-radius:10px;aspect-ratio:3/4;position:relative;overflow:hidden;cursor:pointer;transition:all .2s}
+.img-slot:hover{border-color:var(--a)}
+.img-slot img{width:100%;height:100%;object-fit:cover;display:block}
+.img-slot .slot-label{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.85));padding:8px 10px 8px;font-size:10px;font-family:'Syne',sans-serif;font-weight:700;color:#fff;letter-spacing:.4px}
+.img-slot .slot-dl{position:absolute;top:6px;right:6px;background:rgba(16,185,129,.85);border:none;border-radius:5px;color:#fff;font-size:10px;padding:3px 8px;cursor:pointer;display:none;font-family:'DM Sans',sans-serif;font-weight:600}
+.img-slot:hover .slot-dl{display:block}
+.img-slot .slot-loading{position:absolute;inset:0;background:rgba(10,10,20,.8);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;font-size:11px;color:var(--a)}
+.img-slot .slot-err{position:absolute;inset:0;background:rgba(30,10,10,.8);display:flex;align-items:center;justify-content:center;font-size:10px;color:#f87171;padding:10px;text-align:center}
+.spinner{width:28px;height:28px;border:3px solid rgba(91,122,245,.2);border-top-color:var(--a);border-radius:50%;animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-.results{display:none}.results.show{display:block}
-@media(min-width:640px){.rcols{display:grid;grid-template-columns:1fr 1fr;gap:16px}}
-.img-out{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:16px}
-.img-ph{padding:60px 20px;text-align:center;color:var(--muted);font-size:13px;line-height:1.7}
-.img-acts{display:flex;gap:10px;padding:14px;border-top:1px solid var(--border)}
-.img-acts .btn{flex:1;padding:10px;font-size:12px}
-.rb{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:12px;transition:border-color .2s}
+
+/* Input image area */
+.src-img-wrap{background:var(--s);border:2px dashed var(--b);border-radius:10px;min-height:120px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:border-color .2s;position:relative;overflow:hidden;margin-bottom:13px}
+.src-img-wrap:hover{border-color:var(--a)}
+.src-img-wrap img{width:100%;height:200px;object-fit:contain;display:block}
+.src-img-wrap .ph{color:var(--m);font-size:12px;text-align:center;padding:20px;line-height:1.6}
+.src-img-wrap .rm{position:absolute;top:6px;right:6px;background:rgba(239,68,68,.8);border:none;border-radius:5px;color:#fff;font-size:11px;padding:3px 8px;cursor:pointer}
+
+/* Style pills */
+.style-pills{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:13px}
+.pill{padding:6px 13px;border-radius:7px;font-size:11px;border:1px solid var(--b);cursor:pointer;transition:all .2s;color:var(--m);background:var(--s);font-family:'DM Sans',sans-serif;font-weight:500}
+.pill:hover{border-color:var(--a);color:var(--a)}
+.pill.on{background:rgba(91,122,245,.15);border-color:var(--a);color:var(--a)}
+
+/* Progress */
+.pw{display:none;margin:14px 0}.pw.show{display:block}
+.pb{height:3px;background:var(--b);border-radius:2px;overflow:hidden;margin-bottom:10px}
+.pf{height:100%;width:0%;background:linear-gradient(90deg,var(--a),var(--a2));border-radius:2px;transition:width .35s ease}
+.ps{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--m);padding:4px 0;border-bottom:1px solid var(--b)}
+.ps:last-child{border-bottom:none}.ps.run{color:var(--a)}.ps.ok{color:var(--g)}.ps.fail{color:var(--r)}
+.spin-s{animation:spin .8s linear infinite;display:inline-block}
+
+/* Results - copy blocks */
+.rb{background:var(--s);border:1px solid var(--b);border-radius:9px;padding:13px;margin-bottom:10px;transition:border-color .2s}
 .rb:hover{border-color:rgba(91,122,245,.3)}
-.rh{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px}
-.rl{font-size:11px;font-family:'Syne',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--muted)}
-.rt{font-size:13px;line-height:1.7;color:var(--text);white-space:pre-wrap;word-break:break-word}
-.cc{font-size:11px;color:var(--muted);margin-top:5px}
-.tw{display:flex;flex-wrap:wrap;gap:6px}
-.tag{background:rgba(91,122,245,.1);border:1px solid rgba(91,122,245,.25);color:#8fa8f7;padding:3px 10px;border-radius:12px;font-size:11px;cursor:pointer}
+.rh{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px}
+.rl{font-size:10px;font-family:'Syne',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--m)}
+.rt{font-size:12px;line-height:1.7;color:var(--t);white-space:pre-wrap;word-break:break-word}
+.cc{font-size:10px;color:var(--m);margin-top:4px}
+.tw{display:flex;flex-wrap:wrap;gap:5px}
+.tag{background:rgba(91,122,245,.1);border:1px solid rgba(91,122,245,.25);color:#8fa8f7;padding:2px 9px;border-radius:10px;font-size:10px;cursor:pointer}
 .tag:hover{background:rgba(91,122,245,.2)}
-.cp{display:inline-flex;align-items:center;gap:5px;background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.25);color:#b08af0;padding:6px 12px;border-radius:7px;font-size:12px}
-.rr{text-align:center;margin-top:24px}
-::-webkit-scrollbar{width:6px}::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+.cat-p{display:inline-flex;align-items:center;gap:4px;background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.25);color:#b08af0;padding:5px 11px;border-radius:6px;font-size:11px}
 </style>
 </head>
 <body>
 <div class="wrap">
 
 <header>
-  <div class="logo-row"><div class="logo">🛒</div><h1>Ozon 搬家助手</h1></div>
-  <p class="sub">填写商品信息 → Gemini AI 生成俄语主图 + 上架文案</p>
+  <div class="logo-row"><div class="logo">🛒</div><h1>Ozon 搬家助手 v3</h1></div>
+  <p class="sub">上传商品图 → AI 重新生成俄罗斯风格主图 + 上架文案 · 基于 allapi.store</p>
 </header>
 
-<!-- Key -->
+<!-- API Key -->
 <div class="card" id="ckey">
-  <div class="ct"><span class="dot"></span>第一步：配置 Gemini API Key</div>
+  <div class="ct"><span class="dot"></span>API Key 配置</div>
   <div class="hint">
-    <strong>获取 Key（1分钟）</strong><br>
-    1. 打开 <a href="https://aistudio.google.com/app/apikey" target="_blank">aistudio.google.com/app/apikey</a><br>
-    2. 点击 <strong>「Create API Key」</strong> → 复制粘贴到下方<br>
-    <span style="opacity:.8">✅ 每天免费50次 · Key 仅存在你电脑浏览器本地，不上传</span>
+    填入你的 <strong>allapi.store API Key</strong>，Key 只存在你的浏览器本地。<br>
+    没有Key？打开 <a href="https://allapi.store" target="_blank">allapi.store</a> 注册充值后获取。
   </div>
   <div class="iw has-eye">
-    <label>Gemini API Key</label>
-    <input type="password" id="gkey" placeholder="AIzaSy...">
+    <label>allapi.store API Key</label>
+    <input type="password" id="apikey" placeholder="sk-...">
     <button class="eye" onclick="toggleEye()">👁</button>
   </div>
-  <button class="btn btn-p" onclick="saveKey()">保存 Key</button>
-  <div id="keyOk" style="display:none;margin-top:10px;font-size:12px;color:var(--green)">✅ Key 已保存，请填写下方商品信息</div>
+  <div class="cols2" style="margin-bottom:13px">
+    <div class="iw" style="margin-bottom:0">
+      <label>生图模型</label>
+      <select id="imgModel">
+        <option value="gemini-3-pro-image-preview">👑 Gemini 3 Pro 视觉（最强）</option>
+        <option value="gemini-3.1-flash-image-preview" selected>⚡ Gemini 3.1 Flash（推荐）</option>
+        <option value="gpt-image-1.5-all">🧠 GPT Image 多维聚合</option>
+        <option value="sora_image">🌌 Sora 引擎</option>
+        <option value="flux.1.1-pro">🌪️ Flux 画质重构</option>
+      </select>
+    </div>
+    <div class="iw" style="margin-bottom:0">
+      <label>文案模型</label>
+      <select id="seoModel">
+        <option value="gemini-3-pro-preview">👑 Gemini 3 Pro 文案</option>
+        <option value="gemini-3-flash-preview" selected>⚡ Gemini 3 Flash（推荐）</option>
+        <option value="qwen3.5-plus-2026-02-15">🐼 Qwen 俄语特化</option>
+      </select>
+    </div>
+  </div>
+  <button class="btn btn-p" onclick="saveKey()">保存配置 →</button>
+  <div id="keyOk" style="display:none;margin-top:10px;font-size:11px;color:var(--g)">✅ 已保存</div>
 </div>
 
 <!-- Input -->
 <div class="card">
-  <div class="ct"><span class="dot"></span>第二步：填写商品信息</div>
-  <div class="iw">
-    <label>商品链接（可选，填了会显示在记录里）</label>
-    <input type="text" id="purl" placeholder="https://www.amazon.com/dp/...">
+  <div class="ct"><span class="dot"></span>商品信息</div>
+
+  <!-- Source image -->
+  <label>商品原图（点击上传 或 粘贴图片链接）</label>
+  <div class="src-img-wrap" id="srcWrap" onclick="document.getElementById('srcFile').click()">
+    <div class="ph" id="srcPh">📷 点击上传商品图<br><span style="font-size:10px;color:var(--m)">支持 JPG / PNG，AI 将基于此图重新生成</span></div>
   </div>
+  <input type="file" id="srcFile" accept="image/*" style="display:none" onchange="onFileSelect(this)">
+
   <div class="iw">
-    <label>中文标题 <span style="color:var(--red)">*</span></label>
+    <label>或粘贴图片URL</label>
+    <input type="text" id="imgUrl" placeholder="https://...jpg" oninput="onUrlInput(this.value)">
+  </div>
+
+  <div class="iw">
+    <label>中文标题 / 产品名称 <span style="color:var(--r)">*</span></label>
     <input type="text" id="ztitle" placeholder="例：骑行尾灯 USB充电 IPX6防水 300流明">
   </div>
+
   <div class="iw">
-    <label>卖点 / 功能描述（越详细效果越好）</label>
-    <textarea id="feats" rows="4" placeholder="例：&#10;- 300流明超亮LED&#10;- IPX6防水防震，雨天可用&#10;- USB-C快充，续航8小时&#10;- 适合公路车/山地车尾部安装&#10;- 3种闪烁模式"></textarea>
+    <label>卖点 / 功能描述</label>
+    <textarea id="feats" rows="3" placeholder="例：300流明超亮&#10;IPX6防水，续航8小时&#10;USB-C快充，3种闪烁模式"></textarea>
   </div>
-  <div class="iw">
-    <label>产品类别（选填）</label>
-    <input type="text" id="pcat" placeholder="例：骑行灯 / 健身器材 / 蓝牙耳机">
+
+  <!-- Style selector -->
+  <label style="margin-bottom:8px">生成图片风格（可多选）</label>
+  <div class="style-pills" id="stylePills">
+    <span class="pill on" data-style="main">主图 3:4</span>
+    <span class="pill" data-style="detail">产品展示图</span>
+    <span class="pill" data-style="life">生活场景副图</span>
+    <span class="pill" data-style="spec">卖点特写图</span>
   </div>
+
   <div id="ierr" class="err"></div>
-  <button class="btn btn-p" id="genBtn" onclick="go()">✨ 生成主图 + 俄语文案</button>
+  <button class="btn btn-p" id="genBtn" onclick="go()">✨ AI 重新生图 + 生成俄语文案</button>
 </div>
 
 <!-- Progress -->
 <div class="pw" id="pw"><div class="pb"><div class="pf" id="pf"></div></div><div id="psteps"></div></div>
 
 <!-- Results -->
-<div class="results" id="res">
-  <div class="rcols">
-    <div>
-      <div class="img-out">
-        <div style="padding:14px 18px 0"><div class="ct" style="margin-bottom:10px"><span class="dot"></span>AI 生成主图</div></div>
-        <div id="imgArea"><div class="img-ph">主图将在这里显示</div></div>
-        <div class="img-acts">
-          <button class="btn btn-p" id="dlBtn" onclick="dlImg()" style="display:none;flex:2">⬇ 下载主图</button>
-          <button class="btn btn-o" id="rgBtn" onclick="regenImg()" style="display:none;flex:1">🎲 重新生图</button>
-        </div>
-      </div>
+<div id="res" style="display:none">
+
+  <!-- Generated images grid -->
+  <div class="card">
+    <div class="ct" style="justify-content:space-between;margin-bottom:14px">
+      <div style="display:flex;align-items:center;gap:6px"><span class="dot"></span>AI 生成主图</div>
+      <button class="btn-cp" onclick="dlAll()">⬇ 下载全部</button>
     </div>
-    <div>
-      <div class="rb"><div class="rh"><div class="rl">📂 Ozon 类目</div><button class="btn-cp" onclick="cp('catv',this)">复制</button></div><span class="cp">📁 <span id="catv">—</span></span></div>
-      <div class="rb"><div class="rh"><div class="rl">🇷🇺 俄语标题</div><button class="btn-cp" onclick="cp('rtit',this)">复制</button></div><div class="rt" id="rtit">—</div><div class="cc" id="rlen"></div></div>
-      <div class="rb"><div class="rh"><div class="rl">🇷🇺 俄语描述</div><button class="btn-cp" onclick="cp('rdesc',this)">复制</button></div><div class="rt" id="rdesc">—</div></div>
-      <div class="rb"><div class="rh"><div class="rl">🏷️ 关键词</div><button class="btn-cp" onclick="cpkw(this)">全部复制</button></div><div class="tw" id="kwtags"></div></div>
+    <div class="img-grid" id="imgGrid"></div>
+    <button class="btn btn-o" style="width:100%;margin-top:4px" onclick="regenImgs()">🎲 重新生成所有图片</button>
+  </div>
+
+  <!-- Copy content -->
+  <div class="card">
+    <div class="ct"><span class="dot"></span>俄语上架文案</div>
+    <div class="rb">
+      <div class="rh"><div class="rl">📂 Ozon 类目</div><button class="btn-cp" onclick="cp('catv',this)">复制</button></div>
+      <span class="cat-p">📁 <span id="catv">—</span></span>
+    </div>
+    <div class="rb">
+      <div class="rh"><div class="rl">🇷🇺 俄语标题</div><button class="btn-cp" onclick="cp('rtit',this)">复制</button></div>
+      <div class="rt" id="rtit">—</div>
+      <div class="cc" id="rlen"></div>
+    </div>
+    <div class="rb">
+      <div class="rh"><div class="rl">🇷🇺 俄语描述</div><button class="btn-cp" onclick="cp('rdesc',this)">复制</button></div>
+      <div class="rt" id="rdesc">—</div>
+    </div>
+    <div class="rb">
+      <div class="rh"><div class="rl">🏷️ 搜索标签 (20个)</div><button class="btn-cp" onclick="cp('rtags',this)">复制</button></div>
+      <div class="rt" id="rtags" style="font-size:11px;color:#8fa8f7">—</div>
+    </div>
+    <div class="rb">
+      <div class="rh"><div class="rl">📝 原始中文标题</div><button class="btn-cp" onclick="cp('zref',this)">复制</button></div>
+      <div class="rt" id="zref" style="color:var(--m);font-size:11px">—</div>
     </div>
   </div>
-  <div class="rr"><button class="btn btn-o" onclick="reset()" style="padding:10px 28px">🔄 处理下一个商品</button></div>
+
+  <div style="text-align:center;margin-top:8px">
+    <button class="btn btn-o" onclick="reset()" style="padding:10px 28px">🔄 处理下一个商品</button>
+  </div>
 </div>
 
 </div>
-<canvas id="wc" style="display:none"></canvas>
 <script>
-const MT='gemini-1.5-pro', MI='imagen-3.0-generate-002';
-const GB='https://generativelanguage.googleapis.com/v1beta';
-let gkey='',kw=[],lb64='',lru=null,lp=null;
+// ─── Constants ────────────────────────────────────────────────
+const API = 'https://allapi.store';
 
-onload=()=>{
-  gkey=localStorage.getItem('oz_gkey')||'';
-  if(gkey){document.getElementById('gkey').value=gkey;document.getElementById('keyOk').style.display='block';}
+const STYLE_PROMPTS = {
+  main:   (title, feats) => `电商产品主图，面向俄罗斯Ozon平台买家，俄语排版。主体居中占画面80%。画面顶部带有醒目3D渲染粗体俄语主标题，高跳跃率亮色字体（橙色或红色高对比度）。产品下方有"产品名称+核心特性"的半透明圆角矩形俄文UI文本框。卖点文字: "${feats}"。专业影棚级布光，45度侧主光与强烈轮廓光。背景极简微纹理风格。8K分辨率，商业广告级画质。产品: ${title}。--ar 3:4`,
+  detail: (title, feats) => `面向俄罗斯Ozon买家，俄语排版。专业高级产品陈列摄影，45度等距视角，产品置于极简几何展台。商业杂志排版风格，带有精致俄语参数文案，字体大小粗细对比强烈，主推卖点俄文亮色强调。柔和漫反射光线与深邃体积阴影。卖点: "${feats}"。产品: ${title}。8K分辨率。--ar 3:4`,
+  life:   (title, feats) => `面向俄罗斯Ozon买家，俄语排版。高级商业生活方式摄影，产品自然融入俄罗斯风格家居环境，为绝对视觉焦点。画面虚化区域融入呼吸感极强的俄语营销文案，带优雅主副标题。电影级光影构图。卖点: "${feats}"。产品: ${title}。8K分辨率。--ar 3:4`,
+  spec:   (title, feats) => `面向俄罗斯Ozon买家，俄语排版。极致微距特写摄影，聚焦产品核心工艺细节。侧边留白处有俄语简洁无衬线文案，发光指示线连接文案与细节。文字置于磨砂玻璃质感圆角矩形底框内，信息层级分明。卖点: "${feats}"。产品: ${title}。8K分辨率。--ar 3:4`
 };
-function toggleEye(){const i=document.getElementById('gkey');i.type=i.type==='password'?'text':'password';}
-function saveKey(){
-  const k=document.getElementById('gkey').value.trim();
-  if(!k){alert('请输入 Gemini API Key');return;}
-  gkey=k;localStorage.setItem('oz_gkey',k);
-  document.getElementById('keyOk').style.display='block';
-  document.getElementById('ztitle').focus();
+
+const STYLE_LABELS = { main:'主图', detail:'展示图', life:'生活副图', spec:'卖点图' };
+
+const SEO_PROMPT = `# Role
+你是拥有10年经验的俄罗斯Ozon资深运营专家，精通SEO搜索排名规则。
+
+# Task
+根据商品信息，生成完整的Ozon上架内容。
+
+# Rules
+## 标题
+- 逻辑：核心大词 + 精准长尾词 + 核心属性
+- 限制：< 200字符
+
+## 搜索标签
+- 数量：恰好20个
+- 格式：带#号，空格分隔，单个不超过29字符
+
+## 产品描述
+- 格式整洁，多用数字，适当加表情符号
+- 字数 > 200字
+- 专业电商风格
+
+# 输出格式
+严格只返回JSON，不要任何其他文字：
+{"title":"俄语标题","tags":"#标签1 #标签2...共20个","description":"俄语描述","category":"Ozon三级类目(俄语)","categoryZh":"Ozon三级类目(中文)"}`;
+
+let apiKey='', imgModelId='gemini-3.1-flash-image-preview', seoModelId='gemini-3-flash-preview';
+let srcB64='', srcMime='image/jpeg', srcUrlVal='';
+let selectedStyles=['main'];
+let lastProduct=null, lastRu=null, generatedSlots=[];
+
+// ─── Init ─────────────────────────────────────────────────────
+window.onload = () => {
+  apiKey = localStorage.getItem('oz_apikey') || '';
+  if (apiKey) {
+    document.getElementById('apikey').value = apiKey;
+    document.getElementById('keyOk').style.display = 'block';
+  }
+  // Style pill toggle
+  document.querySelectorAll('.pill').forEach(p => {
+    p.onclick = () => {
+      p.classList.toggle('on');
+      selectedStyles = [...document.querySelectorAll('.pill.on')].map(x => x.dataset.style);
+    };
+  });
+};
+
+function toggleEye() { const i=document.getElementById('apikey'); i.type=i.type==='password'?'text':'password'; }
+
+function saveKey() {
+  const k = document.getElementById('apikey').value.trim();
+  const m = document.getElementById('imgModel').value;
+  const s = document.getElementById('seoModel').value;
+  if (!k) { alert('请输入 API Key'); return; }
+  apiKey = k; imgModelId = m; seoModelId = s;
+  localStorage.setItem('oz_apikey', k);
+  document.getElementById('keyOk').style.display = 'block';
 }
 
-async function go(){
-  const title=document.getElementById('ztitle').value.trim();
-  const feats=document.getElementById('feats').value.trim();
-  const cat=document.getElementById('pcat').value.trim();
-  const url=document.getElementById('purl').value.trim();
-  const ee=document.getElementById('ierr');
-  he(ee);
-  if(!gkey){se(ee,'请先填写并保存 Gemini API Key');return;}
-  if(!title){se(ee,'请填写中文标题（必填）');return;}
-  document.getElementById('genBtn').disabled=true;
-  document.getElementById('res').classList.remove('show');
-  const pw=document.getElementById('pw');pw.classList.add('show');
-  document.getElementById('psteps').innerHTML='';fill(5);
-  lp={title,feats,cat,url};
-  try{
-    ap('c','Gemini 生成俄语文案…','run');fill(15);
-    const ru=await genRu(lp);lru=ru;
-    up('c','✅ 俄语文案生成完成','ok');fill(45);
-    ap('i','Imagen 3 生成电商主图（约15秒）…','run');fill(50);
-    const b64=await genImg(lp,ru);
-    up('i','✅ 主图生成完成','ok');fill(78);
-    ap('t','叠加俄语文字…','run');fill(85);
-    const fb64=await overlay(b64,ru);lb64=fb64;
-    up('t','✅ 完成','ok');fill(100);
-    setTimeout(()=>{pw.classList.remove('show');showRes(ru,fb64);},500);
-  }catch(e){
-    up('c','❌ '+e.message,'fail');
-    se(ee,'生成失败：'+e.message);
-    document.getElementById('genBtn').disabled=false;
+// ─── Image input ──────────────────────────────────────────────
+function onFileSelect(inp) {
+  const file = inp.files[0]; if (!file) return;
+  srcMime = file.type || 'image/jpeg';
+  const reader = new FileReader();
+  reader.onload = e => {
+    srcB64 = e.target.result.split(',')[1];
+    showSrcPreview(e.target.result);
+  };
+  reader.readAsDataURL(file);
+}
+
+function onUrlInput(url) {
+  srcUrlVal = url.trim();
+  if (url.match(/\.(jpg|jpeg|png|webp)/i)) {
+    showSrcPreview(url);
   }
 }
 
-async function genRu(p){
-  const prompt=`Ты — эксперт по продажам на Ozon с отличным знанием русского языка.
-Товар:
-- Название (китайский): ${p.title}
-- Особенности: ${p.feats||'не указано'}
-- Категория: ${p.cat||'определи сам'}
+function showSrcPreview(src) {
+  const wrap = document.getElementById('srcWrap');
+  document.getElementById('srcPh').style.display = 'none';
+  let img = wrap.querySelector('img');
+  if (!img) { img = document.createElement('img'); wrap.appendChild(img); }
+  img.src = src;
+  let rm = wrap.querySelector('.rm');
+  if (!rm) {
+    rm = document.createElement('button'); rm.className = 'rm'; rm.textContent = '✕';
+    rm.onclick = e => { e.stopPropagation(); clearSrc(); };
+    wrap.appendChild(rm);
+  }
+}
 
-Верни ТОЛЬКО JSON без лишнего текста:
-{"ruTitle":"заголовок до 200 символов, ключевые слова вначале","ruDescription":"описание 180-260 слов, преимущества, естественный русский","keywords":["слово1","слово2",...12-14 слов],"ozonCategory":"категория Ozon третьего уровня по-русски","sellingPoints":["плюс1 кратко","плюс2 кратко","плюс3 кратко"],"imgDesc":"English: product visual description for AI image gen, 25 words max"}`;
-  const r=await cg(prompt);
-  const m=r.match(/\{[\s\S]*\}/);
-  if(!m)throw new Error('AI返回格式异常，请重试');
+function clearSrc() {
+  srcB64 = ''; srcUrlVal = '';
+  const wrap = document.getElementById('srcWrap');
+  const img = wrap.querySelector('img'); if (img) img.remove();
+  const rm = wrap.querySelector('.rm'); if (rm) rm.remove();
+  document.getElementById('srcPh').style.display = 'block';
+  document.getElementById('imgUrl').value = '';
+  document.getElementById('srcFile').value = '';
+}
+
+// ─── Convert URL to base64 ────────────────────────────────────
+async function urlToB64(url) {
+  const r = await fetch(url);
+  if (!r.ok) throw new Error(`图片抓取失败 HTTP ${r.status}`);
+  const blob = await r.blob();
+  srcMime = blob.type || 'image/jpeg';
+  return new Promise(res => {
+    const fr = new FileReader();
+    fr.onloadend = () => res(fr.result.split(',')[1]);
+    fr.readAsDataURL(blob);
+  });
+}
+
+// ─── Main flow ────────────────────────────────────────────────
+async function go() {
+  const title = document.getElementById('ztitle').value.trim();
+  const feats = document.getElementById('feats').value.trim();
+  const ee = document.getElementById('ierr');
+  he(ee);
+
+  if (!apiKey) { se(ee, '请先填写并保存 API Key'); return; }
+  if (!title)  { se(ee, '请填写中文标题（必填）'); return; }
+  if (!selectedStyles.length) { se(ee, '请至少选择一种图片风格'); return; }
+
+  // Resolve image
+  let b64 = srcB64, mime = srcMime;
+  if (!b64 && srcUrlVal) {
+    try { b64 = await urlToB64(srcUrlVal); mime = srcMime; }
+    catch(e) { se(ee, '图片URL加载失败：'+e.message); return; }
+  }
+  if (!b64) { se(ee, '请上传商品图片或填写图片URL'); return; }
+
+  document.getElementById('genBtn').disabled = true;
+  document.getElementById('res').style.display = 'none';
+  const pw = document.getElementById('pw'); pw.classList.add('show');
+  document.getElementById('psteps').innerHTML = ''; fill(5);
+
+  lastProduct = { title, feats, b64, mime };
+
+  try {
+    // Step 1: SEO copy
+    ap('seo', 'AI 生成俄语上架文案…', 'run'); fill(10);
+    const ru = await genSeo(title, feats, b64, mime);
+    lastRu = ru;
+    up('seo', '✅ 俄语文案生成完成', 'ok'); fill(30);
+
+    // Step 2: Images (parallel)
+    ap('img', `生成 ${selectedStyles.length} 张 AI 主图…`, 'run'); fill(35);
+    initImageGrid(selectedStyles);
+    const results = await Promise.allSettled(
+      selectedStyles.map((style, i) => genOneImage(style, title, feats, b64, mime, ru, i))
+    );
+    const successCount = results.filter(r => r.status === 'fulfilled').length;
+    up('img', `✅ 完成 ${successCount}/${selectedStyles.length} 张`, 'ok'); fill(100);
+
+    showCopy(ru);
+    setTimeout(() => { pw.classList.remove('show'); document.getElementById('res').style.display='block'; document.getElementById('res').scrollIntoView({behavior:'smooth'}); }, 400);
+
+  } catch(e) {
+    up('seo', '❌ '+e.message, 'fail');
+    se(ee, '生成失败：'+e.message);
+    document.getElementById('genBtn').disabled = false;
+  }
+}
+
+// ─── SEO generation ───────────────────────────────────────────
+async function genSeo(title, feats, b64, mime) {
+  const userPrompt = `商品中文标题：${title}\n卖点：${feats||'无'}\n\n请生成完整的Ozon俄语上架内容。`;
+  const messages = [{
+    role: 'user',
+    content: [
+      { type: 'text', text: SEO_PROMPT + '\n\n' + userPrompt },
+      { type: 'image_url', image_url: { url: `data:${mime};base64,${b64}` } }
+    ]
+  }];
+  const text = await callText(seoModelId, messages);
+  const m = text.match(/\{[\s\S]*\}/);
+  if (!m) throw new Error('文案AI返回格式异常，请重试');
   return JSON.parse(m[0]);
 }
 
-async function genImg(p,ru){
-  const desc=ru.imgDesc||p.title;
-  const prompt=`Clean professional e-commerce product photo: ${desc}. `+
-    `Modern e-commerce banner style. Deep navy-to-cobalt gradient background. `+
-    `Product centered with dramatic studio lighting and soft drop shadow. `+
-    `Thin gold accent line below product. Subtle geometric light rays. `+
-    `NO text anywhere. Photorealistic 4K quality. 1:1 square format.`;
-  const url=`${GB}/models/${MI}:predict?key=${gkey}`;
-  const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({instances:[{prompt}],parameters:{sampleCount:1,aspectRatio:'1:1'}})});
-  if(!r.ok){
-    const e=await r.json().catch(()=>({}));
-    if(r.status===400)throw new Error('Imagen 3 访问受限：请在 Google AI Studio 确认已开启 Imagen API，或账号地区不支持');
-    if(r.status===429)throw new Error('请求太频繁，请等10秒后重试');
-    throw new Error(e.error?.message||`Imagen错误(${r.status})`);
-  }
-  const d=await r.json();
-  const b64=d.predictions?.[0]?.bytesBase64Encoded;
-  if(!b64)throw new Error('Imagen 3 未返回图片数据，请重试');
-  return b64;
-}
-
-function overlay(b64,ru){
-  return new Promise(res=>{
-    const img=new Image();
-    img.onload=()=>{
-      const S=900,canvas=document.getElementById('wc');
-      canvas.width=S;canvas.height=S;
-      const ctx=canvas.getContext('2d');
-      ctx.drawImage(img,0,0,S,S);
-      // Bottom gradient bar
-      const BAR=185,g=ctx.createLinearGradient(0,S-BAR-30,0,S);
-      g.addColorStop(0,'rgba(8,16,60,0)');g.addColorStop(.35,'rgba(8,16,60,.82)');g.addColorStop(1,'rgba(8,16,60,.97)');
-      ctx.fillStyle=g;ctx.fillRect(0,S-BAR-30,S,BAR+30);
-      // Gold line
-      ctx.fillStyle='#c9a84c';ctx.fillRect(44,S-BAR-8,S-88,2);
-      // Title
-      const title=ru.ruTitle||'';
-      ctx.textAlign='center';ctx.shadowColor='rgba(0,0,0,.9)';ctx.shadowBlur=8;
-      let fs=30;ctx.font=`bold ${fs}px Arial`;
-      while(ctx.measureText(title).width>S-80&&fs>14){fs--;ctx.font=`bold ${fs}px Arial`;}
-      const lines=wt(ctx,title,S-80);
-      ctx.fillStyle='#ffffff';
-      const lh=fs+8,sy=S-BAR+(BAR-lines.length*lh-38)/2+fs;
-      lines.forEach((l,i)=>ctx.fillText(l,S/2,sy+i*lh));
-      // Selling points
-      ctx.shadowBlur=4;ctx.fillStyle='#a8c4ff';
-      const spfs=Math.max(12,fs-10);ctx.font=`500 ${spfs}px Arial`;
-      const sp=(ru.sellingPoints||ru.keywords||[]).slice(0,3).map(s=>s.slice(0,20)).join('  ✦  ');
-      ctx.fillText(sp,S/2,S-22);
-      ctx.shadowBlur=0;
-      res(canvas.toDataURL('image/png').split(',')[1]);
-    };
-    img.src=`data:image/png;base64,${b64}`;
+// ─── Image generation ─────────────────────────────────────────
+function initImageGrid(styles) {
+  generatedSlots = [];
+  const grid = document.getElementById('imgGrid');
+  grid.innerHTML = '';
+  // Make grid single column if only 1 style
+  grid.style.gridTemplateColumns = styles.length === 1 ? '1fr' : '1fr 1fr';
+  styles.forEach((style, i) => {
+    const slot = document.createElement('div');
+    slot.className = 'img-slot';
+    slot.id = `slot_${i}`;
+    slot.innerHTML = `<div class="slot-loading"><div class="spinner"></div><span>${STYLE_LABELS[style]}</span></div>`;
+    grid.appendChild(slot);
+    generatedSlots.push({ style, url: null });
   });
 }
 
-function wt(ctx,text,maxW){
-  const words=text.split(' '),lines=[];let cur='';
-  for(const w of words){
-    const t=cur?cur+' '+w:w;
-    if(ctx.measureText(t).width<=maxW){cur=t;}
-    else{
-      if(cur)lines.push(cur);cur=w;
-      if(lines.length>=1){
-        const rest=words.slice(words.indexOf(w)).join(' ');
-        lines.push(rest.slice(0,65));return lines;
-      }
+async function genOneImage(style, title, feats, b64, mime, ru, idx) {
+  const slot = document.getElementById(`slot_${idx}`);
+  const prompt = STYLE_PROMPTS[style](
+    ru?.title ? ru.title.slice(0, 40) : title,
+    feats.slice(0, 80)
+  );
+
+  try {
+    const url = await callImage(imgModelId, prompt, b64, mime);
+    generatedSlots[idx].url = url;
+    slot.innerHTML = `
+      <img src="${url}" onerror="this.parentElement.querySelector('.slot-err') && null">
+      <div class="slot-label">${STYLE_LABELS[style]}</div>
+      <button class="slot-dl" onclick="dlOne('${url}','${style}')">⬇ 下载</button>`;
+  } catch(e) {
+    slot.innerHTML = `<div class="slot-err">❌ ${STYLE_LABELS[style]}<br>${e.message.slice(0,60)}</div>`;
+    throw e;
+  }
+}
+
+// ─── API calls ────────────────────────────────────────────────
+async function callText(model, messages) {
+  let url, body;
+  if (model.toLowerCase().includes('gemini')) {
+    url = `${API}/v1beta/models/${model}:generateContent`;
+    const parts = [];
+    for (const m of messages) {
+      if (Array.isArray(m.content)) {
+        for (const c of m.content) {
+          if (c.type === 'text') parts.push({ text: c.text });
+          else if (c.type === 'image_url') {
+            const d = c.image_url.url;
+            const mime2 = d.match(/data:(.*?);/)?.[1] || 'image/jpeg';
+            parts.push({ inlineData: { mimeType: mime2, data: d.split(',')[1] } });
+          }
+        }
+      } else parts.push({ text: m.content });
     }
+    body = { contents: [{ role: 'user', parts }] };
+  } else {
+    url = `${API}/v1/chat/completions`;
+    body = { model, messages };
   }
-  if(cur)lines.push(cur);return lines.slice(0,2);
-}
 
-async function cg(prompt){
-  const url=`${GB}/models/${MT}:generateContent?key=${gkey}`;
-  const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({contents:[{parts:[{text:prompt}]}]})});
-  if(!r.ok){
-    const e=await r.json().catch(()=>({}));
-    if(r.status===400)throw new Error('Gemini API Key 不正确，请重新检查');
-    if(r.status===429)throw new Error('请求太频繁，请稍等后重试');
-    throw new Error(e.error?.message||`Gemini错误(${r.status})`);
+  const r = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + apiKey },
+    body: JSON.stringify(body)
+  });
+  if (!r.ok) {
+    const e = await r.json().catch(() => ({}));
+    throw new Error(e.error?.message || `文案API错误 (${r.status})`);
   }
-  const d=await r.json();
-  return d.candidates?.[0]?.content?.parts?.[0]?.text||'';
-}
-
-function showRes(ru,b64){
-  document.getElementById('imgArea').innerHTML=`<img src="data:image/png;base64,${b64}" style="width:100%;display:block">`;
-  document.getElementById('dlBtn').style.display='flex';
-  document.getElementById('rgBtn').style.display='flex';
-  document.getElementById('catv').textContent=ru.ozonCategory||'—';
-  const t=ru.ruTitle||'—';
-  document.getElementById('rtit').textContent=t;
-  document.getElementById('rlen').textContent=`字符数：${t.length}/200 ${t.length>200?'⚠️超出':'✅'}`;
-  document.getElementById('rdesc').textContent=ru.ruDescription||'—';
-  kw=ru.keywords||[];
-  const kwtags=document.getElementById('kwtags');kwtags.innerHTML='';
-  kw.forEach(k=>{const s=document.createElement('span');s.className='tag';s.textContent=k;s.onclick=()=>navigator.clipboard.writeText(k);kwtags.appendChild(s);});
-  document.getElementById('res').classList.add('show');
-  document.getElementById('genBtn').disabled=false;
-  document.getElementById('res').scrollIntoView({behavior:'smooth',block:'start'});
-}
-
-function dlImg(){if(!lb64)return;const a=document.createElement('a');a.href=`data:image/png;base64,${lb64}`;a.download='ozon_banner.png';a.click();}
-
-async function regenImg(){
-  if(!lp||!lru)return;
-  const btn=document.getElementById('rgBtn');btn.disabled=true;btn.textContent='⟳ 生成中…';
-  document.getElementById('imgArea').innerHTML='<div class="img-ph">Imagen 3 重新生成中…约15秒</div>';
-  try{
-    const b64=await genImg(lp,lru);
-    const fb64=await overlay(b64,lru);lb64=fb64;
-    document.getElementById('imgArea').innerHTML=`<img src="data:image/png;base64,${fb64}" style="width:100%;display:block">`;
-  }catch(e){
-    document.getElementById('imgArea').innerHTML=`<div class="img-ph" style="color:var(--red)">${e.message}</div>`;
+  const d = await r.json();
+  if (model.toLowerCase().includes('gemini')) {
+    return d.candidates?.[0]?.content?.parts?.map(p => p.text||'').join('') || '';
   }
-  btn.disabled=false;btn.textContent='🎲 重新生图';
+  return d.choices?.[0]?.message?.content || '';
 }
 
-function cp(id,btn){
-  navigator.clipboard.writeText(document.getElementById(id).textContent||'').then(()=>{
-    const o=btn.textContent;btn.textContent='✅';btn.classList.add('ok');
-    setTimeout(()=>{btn.textContent=o;btn.classList.remove('ok');},1800);
+async function callImage(model, prompt, b64, mime) {
+  // Gemini native image generation
+  if (model.toLowerCase().includes('gemini')) {
+    const url = `${API}/v1beta/models/${model}:generateContent`;
+    const body = {
+      contents: [{ role: 'user', parts: [
+        { text: prompt },
+        { inlineData: { mimeType: mime, data: b64 } }
+      ]}],
+      safetySettings: [
+        { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_NONE' },
+        { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_NONE' },
+        { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_NONE' },
+        { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_NONE' }
+      ]
+    };
+    const r = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + apiKey },
+      body: JSON.stringify(body)
+    });
+    if (!r.ok) throw new Error(`生图API错误 (${r.status}): ${await r.text().then(t=>t.slice(0,100))}`);
+    const d = await r.json();
+    const parts = d.candidates?.[0]?.content?.parts || [];
+    const imgPart = parts.find(p => p.inlineData);
+    if (imgPart) return `data:${imgPart.inlineData.mimeType};base64,${imgPart.inlineData.data}`;
+    // If text response (no image), fallback
+    const txt = parts.map(p => p.text||'').join('');
+    const urlMatch = txt.match(/https?:\/\/[^\s)]+\.(png|jpg|jpeg|webp)/i);
+    if (urlMatch) return urlMatch[0];
+    throw new Error('模型返回了文字而非图片，请换用支持生图的模型');
+  }
+
+  // Flux via Replicate
+  if (model === 'flux.1.1-pro') {
+    const createR = await fetch(`${API}/replicate/v1/models/black-forest-labs/flux-kontext-dev/predictions`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + apiKey },
+      body: JSON.stringify({ input: { prompt, input_image: `data:${mime};base64,${b64}`, output_format: 'jpg', output_quality: 90 } })
+    });
+    if (!createR.ok) throw new Error(`Flux 创建失败 (${createR.status})`);
+    const job = await createR.json();
+    if (job.error) throw new Error(job.error);
+    for (let i = 0; i < 40; i++) {
+      await sleep(3500);
+      const poll = await fetch(`${API}/replicate/v1/predictions/${job.id}`, { headers: { Authorization: 'Bearer ' + apiKey } });
+      const st = await poll.json();
+      if (st.status === 'succeeded') return Array.isArray(st.output) ? st.output[0] : st.output;
+      if (st.status === 'failed') throw new Error('Flux 渲染失败: ' + (st.error || '未知'));
+    }
+    throw new Error('Flux 超时（等待超过140秒）');
+  }
+
+  // GPT / Sora via chat completions
+  const r = await fetch(`${API}/v1/chat/completions`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + apiKey },
+    body: JSON.stringify({ model, messages: [{ role: 'user', content: [
+      { type: 'text', text: prompt },
+      { type: 'image_url', image_url: { url: `data:${mime};base64,${b64}` } }
+    ]}]})
+  });
+  if (!r.ok) throw new Error(`生图API错误 (${r.status})`);
+  const d = await r.json();
+  const content = d.choices?.[0]?.message?.content || '';
+  const m = content.match(/https?:\/\/[^\s)]+\.(png|jpg|jpeg|webp)/i) || content.match(/https?:\/\/[^\s)]+/);
+  if (m) return m[0];
+  throw new Error('未从响应中提取到图片URL');
+}
+
+// ─── Show copy results ────────────────────────────────────────
+function showCopy(ru) {
+  document.getElementById('catv').textContent = ru.categoryZh ? `${ru.category}（${ru.categoryZh}）` : (ru.category || '—');
+  const t = ru.title || '—';
+  document.getElementById('rtit').textContent = t;
+  document.getElementById('rlen').textContent = `字符数：${t.length}/200 ${t.length>200?'⚠️超出':'✅'}`;
+  document.getElementById('rdesc').textContent = ru.description || '—';
+  document.getElementById('rtags').textContent = ru.tags || '—';
+  document.getElementById('zref').textContent = lastProduct?.title || '—';
+  document.getElementById('genBtn').disabled = false;
+}
+
+// ─── Download ─────────────────────────────────────────────────
+function dlOne(url, style) {
+  const a = document.createElement('a');
+  a.href = url; a.download = `ozon_${style}.png`; a.click();
+}
+function dlAll() {
+  generatedSlots.forEach((s, i) => {
+    if (s.url) setTimeout(() => dlOne(s.url, s.style), i * 400);
   });
 }
-function cpkw(btn){
-  navigator.clipboard.writeText(kw.join(', ')).then(()=>{
-    const o=btn.textContent;btn.textContent='✅';btn.classList.add('ok');
-    setTimeout(()=>{btn.textContent=o;btn.classList.remove('ok');},1800);
+
+// ─── Regen ────────────────────────────────────────────────────
+async function regenImgs() {
+  if (!lastProduct) return;
+  initImageGrid(selectedStyles);
+  await Promise.allSettled(
+    selectedStyles.map((style, i) => genOneImage(style, lastProduct.title, lastProduct.feats, lastProduct.b64, lastProduct.mime, lastRu, i))
+  );
+}
+
+// ─── Copy helpers ─────────────────────────────────────────────
+function cp(id, btn) {
+  navigator.clipboard.writeText(document.getElementById(id).textContent||'').then(() => {
+    const o=btn.textContent; btn.textContent='✅'; btn.classList.add('ok');
+    setTimeout(()=>{ btn.textContent=o; btn.classList.remove('ok'); }, 1800);
   });
 }
-function ap(id,t,c){const d=document.createElement('div');d.id='ps_'+id;d.className='ps '+(c||'');d.innerHTML=(c==='run'?'<span class="spin">⟳</span> ':'')+t;document.getElementById('psteps').appendChild(d);}
+
+// ─── Progress ─────────────────────────────────────────────────
+function ap(id,t,c){const d=document.createElement('div');d.id='ps_'+id;d.className='ps '+(c||'');d.innerHTML=(c==='run'?'<span class="spin-s">⟳</span> ':'')+t;document.getElementById('psteps').appendChild(d);}
 function up(id,t,c){const e=document.getElementById('ps_'+id);if(!e)return;e.className='ps '+c;e.innerHTML=t;}
 function fill(p){document.getElementById('pf').style.width=p+'%';}
 function se(el,m){el.textContent=m;el.classList.add('show');}
 function he(el){el.classList.remove('show');}
-function reset(){
-  ['purl','ztitle','feats','pcat'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('res').classList.remove('show');
+function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
+
+// ─── Reset ────────────────────────────────────────────────────
+function reset() {
+  clearSrc();
+  ['ztitle','feats'].forEach(id => document.getElementById(id).value='');
+  document.getElementById('res').style.display='none';
   document.getElementById('pw').classList.remove('show');
   document.getElementById('psteps').innerHTML='';
   document.getElementById('genBtn').disabled=false;
-  document.getElementById('dlBtn').style.display='none';
-  document.getElementById('rgBtn').style.display='none';
-  fill(0);window.scrollTo({top:0,behavior:'smooth'});
+  fill(0); window.scrollTo({top:0,behavior:'smooth'});
 }
 </script>
 </body>
